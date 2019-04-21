@@ -1,7 +1,7 @@
-#+TITLE: A Simple Example
+#+TITLE: 簡単な例 (A simple example)
 #+AUTHOR: 田村直之
 
-* A Simple Example
+* 簡単な例 (A simple example)
 Scala kernelからのプログラム実行のため，まず以下の関数を定義する．
 #+BEGIN_SRC scala
 import scala.sys.process._
@@ -11,21 +11,28 @@ object bash {
 }
 def out(fileName: String)(block: => Unit): Unit = {
   val o = new java.io.PrintStream(fileName)
-  Console.withOut(o) {
-    block
-  }
+  Console.withOut(o) { block }
   o.close
 }
 #+END_SRC
 
+$\textit{waerden}(3,3;9)$ が充足不能 (unsat)であることを，
+入力ファイル [[../prog/waerden-3-3-9.sat]] を用いて確かめる．
 #+BEGIN_SRC scala
 bash ! "sat13 < ~/prog/waerden-3-3-9.sat"
 #+END_SRC
 
+$\textit{waerden}(j,k;n)$ のCNF式を出力するプログラムは [[../kunth/pdf/sat-waerden.pdf]] である．
 #+BEGIN_SRC scala
-bash ! "grep -v 9 ~/prog/waerden-3-3-9.sat | sat13"
+bash ! "sat-waerden 3 3 8"
 #+END_SRC
 
+以下のようにすれば sat13 の入力として与えることができる．
+#+BEGIN_SRC scala
+bash ! "sat-waerden 3 3 8 | sat13"
+#+END_SRC
+
+同様のことを行うScalaの関数を定義する．
 #+BEGIN_SRC scala
 def waerden(j: Int, k: Int, n: Int): Unit = {
   for (d <- 1 to n; i <- 1 to n; if i+(j-1)*d <= n)
@@ -35,10 +42,13 @@ def waerden(j: Int, k: Int, n: Int): Unit = {
 }
 #+END_SRC
 
+以下のようにすれば sat13 の入力として与えることができる．
 #+BEGIN_SRC scala
+// waerden(3, 3, 8) の出力結果をファイル /tmp/a.sat に保存する
 out("/tmp/a.sat") {
   waerden(3, 3, 8)
 }
+// /tmp/a.sat を入力として sat13 を実行する
 bash ! "sat13 </tmp/a.sat"
 #+END_SRC
 

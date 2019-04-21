@@ -12,7 +12,7 @@ Donald E. Knuth]] 先生の名著 [[https://www-cs-faculty.stanford.edu/~knuth/t
 
 * ノートブック
 
-  - [[file:01A-a_simple_example.ipynb][A Simple Example]]
+  - [[file:01A-a_simple_example.ipynb][簡単な例 (A simple example)]]
 
 * プログラム
 ** Knuth版プログラム
