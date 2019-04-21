@@ -1,0 +1,15 @@
+Z1 = X1 and Y1
+A2 = X1 and Y2
+A3 = X1 and Y3
+B1 = X2 and Y1
+B2 = X2 and Y2
+B3 = X2 and Y3
+Z2 = A2 xor B1
+C1 = A2 and B1
+S = A3 xor B2
+P = A3 and B2
+Z3 = S xor C1
+Q = S and C1
+C2 = P or Q
+Z4 = B3 xor C2
+Z5 = B3 and C2

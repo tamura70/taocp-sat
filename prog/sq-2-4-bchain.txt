@@ -1,0 +1,5 @@
+Z1 = X1
+A2 = X1 and X2
+Z2 = 0
+Z3 = X2 xor A2
+Z4 = X2 and A2

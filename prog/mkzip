@@ -1,0 +1,13 @@
+#!/bin/sh
+sbt compile
+sbt package
+cd ..
+rm taocpsat-prog.zip
+zip -r taocpsat-prog.zip \
+    prog/ \
+    --exclude \
+      prog/mkzip prog/"*~" \
+      prog/src/main/scala/"*~" \
+      prog/project/"*" \
+      prog/target/"*"
+
