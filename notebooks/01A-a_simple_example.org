@@ -17,12 +17,12 @@ def out(fileName: String)(block: => Unit): Unit = {
 #+END_SRC
 
 $\textit{waerden}(3,3;9)$ が充足不能 (unsat)であることを，
-入力ファイル [[../prog/waerden-3-3-9.sat]] を用いて確かめる．
+入力ファイル [[../prog/waerden-3-3-9.sat][waerden-3-3-9.sat]] を用いて確かめる．
 #+BEGIN_SRC scala
 bash ! "sat13 < ~/prog/waerden-3-3-9.sat"
 #+END_SRC
 
-$\textit{waerden}(j,k;n)$ のCNF式を出力するプログラムは [[../kunth/pdf/sat-waerden.pdf]] である．
+$\textit{waerden}(j,k;n)$ のCNF式を出力するプログラムは [[../kunth/pdf/sat-waerden.pdf][sat-waerden]] である．
 #+BEGIN_SRC scala
 bash ! "sat-waerden 3 3 8"
 #+END_SRC
