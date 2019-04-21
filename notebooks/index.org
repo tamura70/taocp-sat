@@ -17,7 +17,7 @@ Donald E. Knuth]] 先生の名著 [[https://www-cs-faculty.stanford.edu/~knuth/t
 Knuth作のSATソルバーや関連するプログラムは，以下に置かれている．
   - [[https://www-cs-faculty.stanford.edu/~knuth/programs.html]]
 
-ここでは，以下のWebページのようにコンパイルし， =/usr/local/bin/= にインストールした．
+ここでは，以下のWebページのようにコンパイルし， =.local/bin/= にインストールする．
   - [[http://bach.istc.kobe-u.ac.jp/lect/taocp-sat/install-knuth.html][Knuth版SATソルバーのインストール]]
 
 ** Knuth版プログラムの利用方法

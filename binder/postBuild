@@ -18,9 +18,8 @@ SCALA_VERSION=2.12.8 ALMOND_VERSION=0.4.0
   --copy-launcher true
 rm -f almond
 
-mv $HOME/bin/* /usr/local/bin
-rmdir $HOME/bin
-chmod +x /usr/local/bin/*
+mv $HOME/bin $HOME/.local
+chmod +x $HOME/.local/bin/*
 
 # Install almond for Scala 2.11
 # SCALA_VERSION=2.11.12 ALMOND_VERSION=0.4.0
