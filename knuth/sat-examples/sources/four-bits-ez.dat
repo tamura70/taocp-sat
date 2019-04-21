@@ -1,0 +1,28 @@
+~ my attempted simplification of Peterson's 4-bit alg
+A0 maybe goto A1
+A1 a1=1 goto A10
+A10 if b2=1 goto A10 else A11
+A11 a2=1 goto A12
+A12 a1=0 goto A13
+A13 if b1=1 goto A13 else A30
+A30 a1=1 goto A31
+A31 if b1=1 goto A32 else A50
+A32 if b2=1 goto A31 else A50
+A50 critical goto A51
+A51 a1=0 goto A52
+A52 a2=0 goto A0
+B0 maybe goto B1
+B1 b1=1 goto B10
+B10 if a1=1 goto B10 else B11
+B11 b2=1 goto B12
+B12 b1=0 goto B13
+B13 if a2=1 goto B13 else B30
+B30 b1=1 goto B31
+B31 if a1=1 goto B32 else B50
+B32 if a2=1 goto B33 else B50
+B33 b1=0 goto B34
+B34 if a1=1 goto B35 else B30
+B35 if a2=1 goto B34 else B30
+B50 critical goto B51
+B51 b1=0 goto B52
+B52 b2=0 goto B0

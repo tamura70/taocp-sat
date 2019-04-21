@@ -1,0 +1,9 @@
+~ taking turns
+A0 maybe goto A1
+A1 if l=1 goto A2 else A1
+A2 critical goto A3
+A3 l=0 goto A0
+B0 maybe goto B1
+B1 if l=0 goto B2 else B1
+B2 critical goto B3
+B3 l=1 goto B0

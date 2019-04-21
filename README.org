@@ -1,0 +1,21 @@
+#+TITLE: TAOCP Satisfiability
+#+AUTHOR: 田村直之
+* はじめに
+# #+HTML: <a href="https://mybinder.org/v2/gh/tamura70/taocp-sat/master?urlpath=lab/tree/notebooks/index.ipynb"><img src="https://mybinder.org/badge_logo.svg"/></a>
+[[https://www-cs-faculty.stanford.edu/~knuth/][Donald E. Knuth]] 先生の名著 [[https://www-cs-faculty.stanford.edu/~knuth/taocp.html][The Art of Computer Programming]] (TAOCP)の
+第4巻 Combinatorial Algorithms 中の 7.2.2.2 節 Satisfiability のプログラム等を提供しています．
+プログラムは， [[http://jupyter.org][Jupyter]] ノートブック ([[https://almond.sh][Almond]] Scala kernelを利用)として記述されており，
+以下のURLをクリックするとWebブラウザ上で実行できる!
+
+  - https://mybinder.org/v2/gh/tamura70/taocp-sat/master?urlpath=lab/tree/notebooks/index.ipynb
+
+教科書の内容の補足については，以下を参照してください．
+
+  - [[http://bach.istc.kobe-u.ac.jp/lect/taocp-sat/][Knuth先生の『TAOCP 7.2.2.2 Satisfiability』を読む]]
+
+* Credits/Links
+Binderのセットアップスクリプトは [[https://github.com/almond-sh/examples][Almond Examples]] から入手した．
+
+  - [[https://almond.sh][Almond]]
+  - [[http://jupyter.org][Jupyter]]
+  - [[https://mybinder.org][Binder]]

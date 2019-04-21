@@ -1,0 +1,1 @@
+../../sgb/word_components.c

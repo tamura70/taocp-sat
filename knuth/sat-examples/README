@@ -1,0 +1,667 @@
+The main example SAT instances in TAOCP 7.2.2.2
+
+This tarball contains source programs by which I've generated a variety
+of test programs while writing about satisfiability for The Art of
+Computer Programming (Section 7.2.2.2, to be included in Volume 4B).
+
+I use my own format for clauses, as described near the beginning of
+each of my SAT solvers. The main solvers, called sat0.w through sat13.w,
+are online at
+  http://www-cs-faculty.stanford.edu/~knuth/programs.html
+near the bottom. That same webpage has conversion filters
+sat-to-dimacs.w and dimacs-to-sat.w, which transform between this
+format and the .cnf files that are used in SAT competitions.
+
+The sources appear in directory "sources". Example clauses that I've
+been using as benchmarks appear in the directories "benchmarks-SAT" and
+"benchmarks-UNSAT". Some of the benchmarks exceed the default limits
+of my solvers; so I usually run them with command-line parameters. For
+example, here's the C-shell script I've been using:
+   foreach v ( *.sat )
+   echo results for $v\:
+   ~/tmp/sat13 h14 b10000 T50000000000 $1 < $v > /dev/null
+   end
+     
+There also are directories "benchmarks-SAT-cnf" and "benchmarks-UNSAT-cnf",
+which contain the same benchmarks in DIMACS format.
+
+Below I'll try to explain how to install and use the programs by which
+I've generated clauses of various kinds while writing the book and
+testing my solvers. Each program is written in CWEB; for example,
+the source file for the generator `sat-waerden' is `sat-waerden.w'.
+
+Many of these generator programs (and all of the solvers) use the
+library of the Stanford GraphBase (libgb.a), especially its
+random number generator. They import relevant header files
+such as `gb_flip.h'. So you need to download and install the SGB
+system, as explained online. You can keep all of these SAT programs
+in the same directory as the SGB sources, if you want, because the
+Makefile for SGB works also when making the SAT generators, solvers,
+and filters.
+
+CWEB programs often have variants that are defined by "change
+files," having the extension `.ch'. To make a program called foo-bar,
+whose sources are foo.w and foo-bar.ch, I set up the handy UNIX alias
+     alias chmake 'ctangle \!* \!$ ; make \!$'
+and say
+     chmake foo foo-bar
+because otherwise it's necessary to type the commands
+     ctangle foo foo-bar foo-bar
+     make foo-bar
+in detail.
+
+All of my examples below assume that `.' is part of my PATH environment.
+In other words, I write
+     sat-waerden 3 3 9 | sat0
+instead of
+     ./sat-waerden 3 3 9 | ./sat0
+etc. (I don't understand how anybody can work efficiently without
+this current-directory-in-execute-path convention, although all of
+the books seem to tell me that I shouldn't be doing it!)
+
+The example shell commands below are based on "tcsh" instead of "bash",
+in that I use ">!" to mean "redirect the output even though that
+file may already exist". (I have "set noclobber", in order to avoid
+unintentionally wiping files out.) The bash equivalent, I guess, is >|.
+
+OK now, here are the main examples I've been using, together with
+a few of lesser importance.
+
+----- van der Waerden numbers
+
+Make `sat-waerden'. Say for example `sat-waerden 3 10 97' for the
+problem of 97-bit strings that have no three equally spaced zeros
+and no ten equally spaced ones.
+
+----- dense arithmetic-progression-free sets
+
+Make `sat-arithprog'. Say for example
+   sat-arithprog-redux 3 100 27 | sat13
+to find a 100-bit string with no three equally spaced ones, but
+with 27 ones. And (harder) change 100 to 99, to get an
+unsatisfiable problem that tries to do this with only 99 bits.
+The first parameter should be 3, 4, 5, or 6.
+
+(I refer to this problem only in one exercise. But it does seem to
+make a series of interesting benchmarks, and I would like to know
+how to tune the parameters of sat13 so that it treats this series
+of problems as efficiently as possible. With the (old) version of SAT13
+that was current in August 2013, I gave up on the case of parameters "3 136 33"
+after one day, although knowing that this problem was proved to be
+unsatisfiable ten years ago, by a programmer who just used backtracking!
+Also my program took unexpectedly long in the case "4 76 36".)
+
+----- Langford pairs
+
+Make `sat-dance' and `langford'. The former takes any input that
+has been prepared in the format used by my dancing-links programs
+and generates clauses for an equivalent satisfiability problem.
+The latter generates dancing-links data for Langford pairs, namely
+the problem of putting two 1s, ..., two ns into a string of length 2n
+so that exactly k digits intervene between the two appearances of k,
+for k = 1, 2, ..., n. (This problem is well known to be satisfiable
+if and only if k mod 4 is 0 or 3.) Say for example
+     langford 12 | sat-dance | sat0
+to find a solution when n=12. The unsatisfiable problem that you get
+when n=13 is beginning to be a little difficult; and when n=17,
+Armin Biere's best parallel solvers needed several days to prove
+unsatisfiability when I visited him in May 2013.
+
+Also chmake `sat-dance-heule' and say e.g.
+     langford 12 | sat-dance-heule | sat10
+to get the corresponding result for what the text calls "langford'".
+
+And chmake `sat-dance-aspvall', `sat-dance-prestwich' to get what the
+text calls "langford''" and "langford'''".
+(The latter seems to be a winner with respect to langford 10 and sat13.)
+
+There's also a completely different set of clauses; make `sat-newlangford'
+and try things like
+     sat-newlangford 13 | sat11
+     sat-newlangford 13 | sat13
+These clauses are better than the others for sat13. (With default
+parameters, sat13 is surprisingly bad at all clause sets that I
+tried for n=13, although sat10 polishes that case off rather well.
+Also curious is that sat10 beats sat11k with the clauses produced
+by langford 13 | sat-dance. And sat10 also likes sat-newlangford 10
+much better than langford 10 | sat-dance. On the other hand, the
+satisfiable case `sat-newlangford 20 | sat10' got nowwhere --- I shut
+it off after 12 hours --- while sat13 found a solution almost instantly.)
+
+------ The Erd\H{o}s discrepancy problem
+
+Chmake `sat-erdos-disc sat-erdos-disc-res'. Then say
+     sat-erdos-disc-res n | sat11
+with n=100, 200, 300, ..., to get solutions to an interesting
+combinatorial problem, which is satisfiable if and only if n<1161.
+(See the paper by Konev and Lisitsa arXiv:1402.2184 for why this problem
+is causing waves.) The difficulty grows rapidly after n passes 600 or so;
+sat13 does better than sat11, but I mentioned sat11 above because this
+is a pure 3SAT problem. (Konev and Lisitsa used a different encoding,
+which I believe is worse than mine but this has yet to be seen.
+With theirs, the time for Glucose to prove unsatisfiability for n=1161
+was about six hours; Plingeling found a solution for n=1160 in about
+13 minutes. SAT13 handled these clauses for n=1161 --- in the untuned version
+of February 2014 --- in slightly less than 50 hours (27.6 teramems),
+while the case n=1160 was satisfied in slightly less than six hours (4.5 Tmu).
+
+------ Graph coloring
+
+Make `sat-color' and `mcgregor-graph' and `queen-graph'.
+Chmake `sat-threshold-sinz-graphs' (in other words do
+   chmake sat-threshold-sinz sat-threshold-sinz-graphs
+using the alias macro above). The commands
+   mcgregor-graph 10
+   sat-color mcgregor10.gb 4 | sat13
+will color the order-10 McGregor graph with four colors. Also
+   sat-color mcgregor10.gb 4 >! /tmp/mcg10.sat
+   sat-threshold-sinz-graphs 110 7 mcgregor10.gb 4 >! /tmp/mcg10le7.sat
+   cat /tmp/mcg10.sat /tmp/mcg10le7.sat | sat13
+will find a four-coloring that uses color 4 at most 7 times.
+
+Alternatively, chmake `sat-threshold-bb-graphs' and use bb instead
+of sinz in the above. The difference is that the at-most-7 constraints
+are enforced by clauses devised by Bailleux and Boufkhad.
+
+The problems become unsatisfiable if you change from at-most-7 to at-most-6.
+
+A more esoteric variation of McGregor graph coloring asks how many of the
+regions can be ``double-colored,'' because their neighbors block out only
+two of the four possible colors. I once believed it impossible to color
+mcgregor9.gb with more than 17 double-colored regions, but learned later
+(via Armin Biere's solvers in 2013) than 18 are possible. To set this up, do
+   sat-threshold-bb-graphs-double 90 18 mcgregor9.gb 4 >! /tmp/stbgd90-18.sat
+   sat-color-kernel mcgregor9.gb 4 >! /tmp/sck9.sat
+   echo 0.8.1\\n0.7.2\\n1.8.3\\n9.8.4 >! /tmp/test9.sat
+   cat /tmp/stbgd90-18.sat /tmp/sck9.sat /tmp/test9.sat | sat13
+and you get a solution. (I used to think this was a hard problem, but
+sat13 now solves it in less than a minute --- only 10 gigamems.)  
+
+Of course graph coloring leads to many other interesting problems. One can say
+   queen-graph 5
+   sat-color queen5x5.gb 5 | sat13
+to color the 5x5 queen graph with five colors. The corresponding
+8x8 problem is unsatisfiable; that is, you can't pack eight
+solutions of the 8 queens problem together. (That run goes MUCH MUCH
+MUCH faster if symmetry is broken by appending the eight unit clauses
+0.0.1, 0.1.2, ..., 0.7.8.) On the other hand,
+   sat-color queen8x8.gb 9 | sat13
+is readily satisfiable.
+
+Replacing `sat-color' by `sat-color-exclusion' appends additional clauses
+to ensure that no vertex gets more than one color. Like `sat-color-kernel',
+this variant doesn't affect satisfiability.
+
+Replacing `sat-color' by `sat-color-log', `sat-color-log2', or `sat-color-log3'
+encodes graph coloring problems in a different way, namely with O(log c)
+binary variables per vertex instead of c, in a c-coloring problem.
+
+There's also `sat-color-order', which uses the order encoding for
+colors and may be the best of all --- especially when it's combined
+with the clauses of `sat-queens-color-order-cliques' and/or
+`sat-queens-color-order-organpipe'.
+
+------ Factoring
+
+Make `sat-dadda' and chmake `sat-dadda-lifo', `sat-dadda-miter'. The command
+   sat-dadda 14 16 853922530 | sat13
+will factor 853922530 into a 14-bit number times a 16-bit number. And
+   sat-dadda-lifo 14 16 853922530 | sat13
+will do it using a different way of summing the partial products.
+(Incidentally, 853922530 can also be factored into 15-bit times 15-bit.)
+
+And the "skeleton in the closet" of SAT solvers is revealed by
+   sat-dadda-miter 10 10 | sat13
+which simply makes two identical copies of a 10-bit by 10-bit multiplier
+circuit and asserts that they give different results. Even on this
+small problem, sat13 seems to need nearly 200 gigamems to show unsatisfiability
+(while sat11k finishes in 50.2 gigamems).
+
+------ Test patterns for single-stuck-at faults
+
+Here the setup is much less automated. I refer you to pages 10--14 of
+Section 7.2.2.2 for further discussion and explanations.
+
+Make `make_prod' and `gates-to-wires' and `gates-stuck' and `sat-gates-stuck';
+also chmake `sat-gates-stuck-namekludge'.
+
+Now the program call
+   make_prod 16 32
+will create `/tmp/prod,16,32.gb', which defines an industrial-strength
+parallel multiplication circuit for 16-bit by 32-bit numbers. And
+   gates-to-wires /tmp/prod,16,32.gb /tmp/prod,16,32-wires.gb
+will convert it to a circuit that takes proper account of the
+fanout when one signal is split across several wires (each of which
+might fail). Then
+   gates-stuck /tmp/prod,16,32-wires.gb 1234567 .9
+generates lots of random test cases in order to weed out the faults
+that are easily handled. (Parameter 1234567 is the random seed; it
+also says that 1234 random trials with no new hits should go by before
+stopping. Parameter .9 says that each random input bit is 1 with
+probability 0.9.) This run outputs a list of 181 remaining faults
+that could be fed to a SAT solver; it begins with
+  1A5:36#2 1A11:42#2 1A14:45#2 1P5:33#2
+and ends with 0B47:47.
+
+To test fault 1A5:36#2 (which means that wire $A^{5,2}_{36}$ is stuck at 1,
+in the book's notation), say
+    sat-gates-stuck-namekludge /tmp/prod,16,32-wires.gb 1A5:36#2 | sat13 h9 >! /tmp/tmp
+and the result is UNSAT; this fault is undetectable because the
+wire is redundant. To test the next fault 1A11:42#2, you have to say
+    sat-gates-stuck-namekludge /tmp/prod,16,32-wires.gb 1A114202 | sat13 h9 >! /tmp/tmp
+instead, because the nine characters of `1A11:42#2' are too long to be
+the name of a variable in my SAT input format. That fault also turns out
+to be UNSAT. But
+    sat-gates-stuck-namekludge /tmp/prod,16,32-wires.gb 0B47:47 | sat13 h9 >! /tmp/tmp
+is satisfiable, and a solution can be found in the X and Y variables
+that are recorded in /tmp/tmp.
+
+Only the first four are UNSAT. Most of the others are satisfied quite easily.
+But the toughest cases seem to be nontrivial (more than 100 megamems); they are
+  1W21#10
+  0W21#18
+  1W21#19
+  0D29:8#16 [call this 0D290816]
+  0D34:13#3 [call this 0D341303]
+  0D34:13#8 [call this 0D341308]
+  0D34:13#9 [call this 0D341309] (the hardest?)
+  0B41:41
+  0D42:13#2 [call this 0D421302]
+  0B42:42
+  0D43:9#2
+  0B43:43
+  0D44:10#2 [call this 0D441002]
+[Well, I ranked those only by the performance with no random seed given.
+With specified seeds (e.g. "s5" in addition to "h9") they weren't so bad.
+The behavior on these satisfiable examples is highly variable.]
+
+------ Learning a simple Boolean function
+
+Here I've got programs that are not at all set up to be general (yet?).
+Make sat-synth, sat-synth-data; chmake sat-synth-trunc-kluj. Then say
+    sat-synth-data 1 0 >! /tmp/synth.sat
+to get a thousand data points from which learning will take place.
+Then try
+    sat-synth-trunc-kluj 20 4 100 < /tmp/synth.sat | sat13
+to see if there's a solution that fits the first 100 points of data for the
+particular function (27) in my text, yet it isn't the same function.
+[In this example, 108 points give a solution, but 109 gives UNSAT;
+thus (27) is uniquely determined by the first 109 data points
+in /tmp/synth.sat.]
+
+------ Minimum-time sorting networks
+
+Make sat-mintime-sort, and then say
+   sat-mintime-sort 9 5 1 6 2 7 3 8 4 9 | sat13 h10
+to get UNSAT, thus proving that no sorting network for nine elements
+can sort everything in 6 parallel steps. (This result was first proved
+in the 80s with a program that ran for hundreds of hours on a CRAY 2!) Also
+   sat-mintime-sort 9 6 1 6 2 7 3 8 4 9 | sat13 h10
+is SAT, showing that 7 parallel steps suffice. Both of these are
+very easy for sat13, but other solvers seem to fail badly.
+
+------ Conway's Life as example of bounded model checking
+
+Make sat-life and sat-life-filter. Chmake sat-threshold-bb-life15,
+sat-life-grid, and sat-life-upper.
+
+Here's how I made the "LIFE in 3" example, which is currently
+called Fig. 352 on page 17 of the text:
+   sat-life-grid 7 15 3 >! /tmp/slg3.sat
+   sat-threshold-bb-life15 105 39 >! /tmp/stb39.sat
+   cat 7x15life3.dat /tmp/slg3.sat /tmp/stb39.sat | sat13 h10 | sat-life-filter
+and the same sequence but with 39 changed to 38 in three places gives an
+unsatisfiable problem.
+
+An interesting unsatisfiable problem, "LIFE in 4", is obtained more
+simply by
+   sat-life-grid 7 15 4 >! /tmp/slg4.sat
+   cat 7x15life4.dat /tmp/slg4.sat | sat13 h10
+and one can tune parameters of sat13 by adding options such as
+   s1 (or s2 or s3 etc., etc., means the random seed is 1, 2, 3, ...)
+   i1 (means restart as often as possible)
+   r.75 (means dampen the variable activity scores faster)
+and various other options for retention of learned clauses, etc.
+
+A large class of satisfiable test problems is exemplified by
+   sat-life-upper -3 8 | sat13 h12 | sat-life-filter
+which finds a way to make cells (x,y) alive for x,y<=0 in such a way
+that cell (-3,8) will become alive at the earliest possible moment
+(which happens to be 8+(8-3)=13 in this case). In general,
+`sat-life-upper x0 y0' is allowed for y0>0 and -y0 <= x0;
+I've tried all cases with y0<10 and -y0 <= x0 < 10; increasingly
+more difficult benchmarks are obtained when the parameters grow.
+For example, `sat-life-upper 7 7' creates a problem with
+97909 variables and 401836 clauses (of total length 1020174).
+(Note that it's best to use "h14" instead of "h12" when there are
+this many variables; the h parameter tells sat13 how big to make
+its hash tables during input.) With the default values of parameters,
+by which I mean the defaults that were current in July 2013,
+sat13 needs 65 gigamems to find a solution when (x0,y0)=(7,7),
+but only 32 megamems when (x0,y0)=(-3,8). (That is, the number of
+accesses to 64-bit memory words is 65 billion or 32 million, respectively.)
+
+The assumption that these problems are always satisfiable is only a
+conjecture, but I have little doubt in its truth.
+
+------- Mutual exclusion
+
+My text discusses mutual exclusion protocols as examples of bounded
+model checking. Here are some of the example SAT instances that are mentioned:
+
+Each protocol is specified in a simple language that is "compiled" into
+clauses by "sat-mutex". For example,
+   cat taking-turns.dat | sat-mutex 100 | sat13
+is unsatisfiable, meaning that no violation of critical sections is
+possible during 100 time steps. However,
+   cat taking-turns.dat | sat-mutex-starve 7 5 | sat13
+is satisfiable, meaning that Bob can be starved by a cycle that loops
+from time 7 to time 5. (Parameters "7 4" would however be UNSAT.)
+Also, a bug is detected in another attempted protocol because
+   cat hyman.dat | sat-mutex 100 | sat13
+is satisfiable. (Also satisfiable if 100 is changed to 9, but UNSAT with 8.)
+
+The protocol of Peterson is more interesting:
+  cat peterson.dat | sat-mutex 100 | sat13
+is UNSAT, hence mutual exclusion isn't violated during 100 steps. Also
+  cat peterson.dat | sat-mutex-distinct 54 | sat13
+is satisfiable, hence a path of distinct states X_0 -> X_1 -> ... -> X_{54} 
+is possible with this protocol. On the other hand, 54 is max, because
+changing it to 55 gives an unsatisfiable set of clauses.
+
+The most difficult protocol I treat (and I think it is original) is
+shown to be starvation-free as follows. First
+  cat four-bits-ez.dat | sat-mutex-lemmas 1 four-bits-ez.lemmas | sat13
+verifies (by being UNSAT) that a given set of "lemmas" is an invariant. Then
+  cat four-bits-ez.dat | sat-mutex-distinct-lemmas 12 four-bits-ez.alemmas | sat13
+is also UNSAT; hence, if we add the additional lemmas in the "alemmas" file,
+the longest sequence of distinct states is at most 11. (And indeed, changing
+12 to 11 gives a satisfiable instance, exhibiting such a sequence.) Then
+  cat four-bits-ez.dat | sat-mutex-starve-lemmas-11 four-bits-ez.alemmas | sat13
+is UNSAT, showing that Alice cannot starve. Similarly, Bob cannot starve;
+but the numbers "12" and "11" become "37" and "36", because sequences of
+distinct states that satisfy the blemmas can be as long as 36.
+
+You'll have to look at the documentation if you really want to understand this!
+
+------- Random 3SAT
+
+Make sat-rand-rep and say for example
+    sat-rand-rep 3 1061 250 314159 | sat11
+for a random 3SAT problem with 250 variables and 1061 clauses.
+That problem happens to be satisfiable.
+
+If the same random seed 314159 is used with, say,
+    sat-rand-rep 3 1062 250 314159 | sat11
+you get one more clause --- the first 1061 are the same --- and
+these 1062 turn out to be unsatisfiable.
+
+------- Digital tomography
+
+Make sat-tomography, sat-tomography-prep, sat-tomography-filter;
+chmake sat-tomography-2nd, sat-tomography-prep-2nd.
+Then
+    cat cheshire.dots | sat-tomography-prep 25 30 | sat-tomography
+should produce a file that matches "cheshire-tom.dat" (which has been
+supplied). That file is specifies an easily satisfiable problem.
+We can make it harder by
+    cat lexlast-5x18 cheshire-tom.dat | sat13 h10 | sat-tomography-filter
+and we can make it unsatisfiable by
+    cat lexlast-5x19 cheshire-tom.dat | sat13 h10 | sat-tomography-filter
+using two other supplied files. Another kind of run
+    cat cheshire.dots | sat-tomography-prep-2nd 25 26 | sat-tomography-2nd | sat13 h12 | sat-tomography-filter
+is uniquely satisfiable by the first 26 columns of the Cheshire cat image.
+(Changing 26 to 30 gives a problem that is also uniquely satisfiable, but
+it appears to be much, much harder: My computer needed 160 hours to solve it,
+using default parameters on the version of SAT13 that I had in September 2013.)
+
+------- Flower snark line graph coloring
+
+This family of 3SAT problems is based on three-coloring an
+interesting family of graphs denoted by L(J_q), where q is odd.
+(These graphs need four colors, so the problems are unsatisfiable.)
+
+Make "flower-snark-line" and say for example
+    flower-snark-line 15
+to generate "fsnarkline15.gb" (the GraphBase representation of L(J_{15})).
+
+Also chmake sat-color sat-color-snark[12345]. Then you can say for example
+    sat-color-snark1 15 | sat11
+if you have previously made fsnarkline15.gb. The running time for sat11
+is roughly proportional to 2^q, but it appears to be linear when
+sat13 is used. I don't fully understand why sat13 is so efficient.
+I do know that a complex tree resolution strategy will refute the clauses
+in O(q^6) steps; but it requires an "intelligent" divide-and-conquer approach!
+
+Several variants are available. For example, sat-color-snark2 adds clauses
+that forbid two colors for the same vertex, while sat-color-snark4 goes
+the other way and insists that each color class is a maximal independent set.
+(The clauses in the latter case belong to 5SAT, not 3SAT.)
+In sat-color-snark3, the variables are presented in such a way that
+the running time of non-lookahead methods that assign variables one by one
+is order 10.25^q(!).
+
+And sat-color-snark-subset leaves out two clauses, leaving a problem
+that is satisfiable.
+
+------- Domino covering
+
+Make sat-tatami and chmake sat-tatami-mutilated. Then
+  sat-tatami < tatami.dots | sat13 h9
+produces one of the eye-catching exercises. And
+  sat-tatami < tatamii.dots | sat13 h9
+is quickly unsatisfiable (you can't put serifs on the `I'). Also
+  sat-tatami-mutilated 8 8 | sat13
+is quickly unsatisfiable, proving that the "mutilated chessboard" (an
+8x8 board with opposite corners removed) cannot be covered with dominoes.
+(The corresponding problem for 16x16 boards required 1.7 teramems
+to learn 39 million clauses, when I first tried it. This is a problem
+that is probably inherently difficult for regular resolution, but
+"easy" for mathematicians or extended resolution.)
+
+------- Posets with no maximal elements
+
+Make sat-poset-nomax; chmake sat-poset-nomax-a and sat-poset-nomax-b. Then
+  sat-poset-nomax 20 | sat13
+is a set of clauses that is unsatisfiable because they assert the existence
+of a partial ordering on 20 elements that has no maximal element. These
+clauses for m-element posets are known to have a refutation of size O(m^3).
+  sat-poset-nomax-a 20 | sat31
+is also unsatisfiable, using only about 1/3 of the former clauses; again
+there's a known refutation of size O(m^3). And the remarkable
+  sat-poset-nomax-b 20 | sat13
+is ALSO unsatisfiable, via a DIFFERENT 1/3 of the original clauses. The
+latter appears to take considerably longer to refute, although it also
+has a (somewhat more complicated) refutation of size O(m^3). In each case
+the running times seem to grow much faster than order m^3.
+
+Incidentally, the clauses of sat-poset-nomax-b are "minimally unsatisfiable":
+Remove any clause, and you can satisfy all the others.
+
+------- Boolean chains to synthesize functions
+
+Make sat-chains and chmake sat-chains-lex-1234. Then
+   sat-chains 4 9 6996 177e 0001 | sat13
+will show how to compute the three bits of x1+x2+x3+x4 in nine steps, while
+   sat-chains-lex-1234 4 8 6996 177e 0001 | sat13
+will show that it can't be done in eight steps.
+
+------- Late Binding solitaire
+
+After chmake sat-graph-quench sat-graph-quench-noncomm-latebinding-random
+(and hearing my apology for using such a long name), you can say
+   sat-graph-quench-noncomm-latebinding-random 314159 | sat13
+and this will solve a random card game that I've been playing with, off and on,
+for more than 40 years. (A full description is in the text.)
+
+------- Quad-free systems of points and lines
+
+Several examples of symmetry-breaking in the text are based on problems
+of `quad-free' matrices, aka Zarankewicz's problem in combinatorics.
+After making sat-zarank and chmaking sat-zarank-symm you can say, for example,
+   sat-zarank 13 13 52 8 8 | sat13
+to find the projective plane of order 3, or
+   sat-zarank-symm 13 13 52 8 8 | sat13
+to prove that no "symmetrical" such system exists. (That would be a
+system of 13 points and 13 lines with p_i in l_j if and only if p_j in l_i.)
+
+------- Open shop scheduling
+
+There's also a generator for random open shop scheduling problems, based
+on methods of Gu\'eret, Prins, Tamura, Taga, Kitagawa, and Banbara.
+
+Make the programs oss-data and sat-oss; also chmake sat-oss-sym and
+sat-oss-sym-scaled. One of the examples that I discuss in the text of
+Section 7.2.2.2 was generated by
+   oss-data 8 1000 .5 256 31415 | sat-oss-sym-scaled 8 8 129 8 | sat13
+and another (after I'd gotten partial results on scaled-down problems) by
+   oss-data 8 1000 .5 256 31415 | sat-oss-sym 8 8 1059 | sat13 h13
+
+------- Closest strings
+
+Try also this
+   sat-closest-string-dat 200 50 90 100 314159 | sat-closest-string | sat13 h13
+to find a binary string that's "closest" to 50 given strings of length 200.
+(The running time is several gigamems; but sat8 is 20 to 40 times faster
+on instances like this!)
+
+------- Connecting pairs (aka multicommodity routing)
+
+Yet another interesting family of examples comes from (recreational?) graph
+theory: To find disjoint paths between given pairs of vertices. Try
+   makeboard 11 18 0 0 1 0 0
+   sat-connection /tmp/board,11,18,0,0,1,0,0.gb < dudeney-connections.dat | sat13
+for an example from Dudeney's Amusements in Mathematics.
+
+------- Tseytin's graph-parity problems
+
+One of the earliest family of hard SAT instances, described by Gregory
+Tseytin in 1966, is generated from a given graph foo.gb by, e.g.,
+   sat-tseytin foo.gb | sat13
+Graphs with large girth lead to particularly difficult problems. The
+program "rand-d4g6" generates more-or-less random 4-regular graphs
+of girth at least 6; one such graph, with 50 vertices, is d4g6-50-0.gb.
+A related generator called sat-eulerian-balance provides simpler 3SAT problems, 
+You can also "chmake graph-cyc sat-graph-cyc" to generate endomorphisms
+that can speed up instances produced by sat-tseytin and sat-eulerian-balance.
+
+------- A note about understanding the solutions
+
+By the way, I should mention a trick that I use to decipher the outputs
+of many of the problems above, when a solution that satisfies the clauses
+has been found. Explicit programs sat-life-filter and sat-tomography-filter
+have been supplied for the most complex cases. But for the others,
+I usually redirect the output to the file /tmp/tmp (say); then with
+emacs I open file /tmp/tmp, delete the initial space, change all other
+spaces to control-J (newline), and sort-lines. In this way, all of the positive
+literals appear at the beginning, in alphabetic order, followed by all of
+the negative ones. The symbolic names of the literals explain the result.
+
+------------------------------------------------------------------
+Here finally are the names of files that were explicitly or
+implicitly mentioned above. These files, plus this README,
+should appear in the tarball `SATexamples.tgz'.
+
+sat-waerden.w
+sat-arithprog.w
+free[3456].dat (data files that give clues to sat-arithprog-redux)
+sat-erdos-disc.w
+sat-erdos-disc-res.ch
+langford.w
+sat-dance.w
+sat-dance-heule.ch
+sat-dance-aspvall.ch
+sat-dance-prestwich.ch
+sat-newlangford.w
+mcgregor-graph.w
+queen-graph.w
+sat-color.w
+sat-color-snark[12345].ch
+sat-color-kernel.w
+sat-color-exclusion.w
+sat-color-snark[12345].ch
+sat-color-snark-subset.ch
+sat-color-log.w
+sat-color-log2.w
+sat-color-log3.w
+sat-color-order.w
+sat-queens-color-order-cliques.w
+sat-queens-color-order-cliques2.w
+sat-queens-color-order-organpipe.ch
+sat-threshold-sinz.w
+sat-threshold-sinz-graphs.ch
+sat-threshold-bb.w
+sat-threshold-bb-graphs.ch
+sat-threshold-bb-graphs-double.ch
+sat-threshold-bb-equal.w
+sat-dadda.w
+sat-dadda-lifo.ch
+make_prod.w
+gates-to-wires.w
+gates-stuck.w
+sat-gates-stuck.w
+sat-gates-stuck-namekludge.ch
+sat-gates-stuck-hardest.sh
+sat-synth.w
+sat-synth-data.w
+sat-synth-trunc-kluj.ch
+sat-mintime-sort.w
+7x15life[1234].dat
+sat-life.w
+sat-life-filter.w
+sat-threshold-bb-life15.ch
+sat-life-grid.ch
+sat-life-upper.ch
+sat-mutex.w
+sat-mutex-distinct.ch
+sat-mutex-distinct-lemmas.ch
+sat-mutex-starve.ch
+sat-mutex-starve-lemmas.ch
+taking-turns.dat
+hyman.dat
+peterson.dat
+four-bits-ez.dat
+four-bits-ez.lemmas
+four-bits-ez.alemmas
+four-bits-ez.blemmas
+sat-tomography.w
+sat-tomography-prep.w
+sat-tomography-filter.w
+cheshire.dots
+cheshire-tom.dat
+lexlast-5x18
+lexlast-5x19
+sat-tomography-2nd.ch
+sat-tomography-prep-2nd.ch
+sat-rand-rep.w
+flower-snark-line.w
+sat-tatami.w
+sat-tatami-mutilated.ch
+tatami.dots
+tatamii.dots
+sat-poset-nomax.w
+sat-poset-nomax-a.ch
+sat-poset-nomax-b.ch
+sat-chains.w
+sat-chains-lex-1234.ch
+sat-graph-quench.w
+sat-graph-quench-noncomm-latebinding-random.ch
+sat-zarank.w
+sat-zarank-symm.ch
+oss-data.w
+sat-oss.w
+sat-oss-sym.ch
+sat-oss-sym-scaled.ch
+sat-closest-string.w
+sat-closest-string-dat.w
+makeboard.w
+sat-connection.w
+dudeney-connections.dat
+sat-tseytin.w
+sat-eulerian-balance.w
+rand-d4g6.w
+d4g6-50-0.gb
+ezgraph.w
+ezgraph-named.ch
+graph-cyc.w
+sat-graph-cyc.ch

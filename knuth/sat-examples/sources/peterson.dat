@@ -1,0 +1,15 @@
+~ Peterson's alg [IPL 12 (1981) 115f]
+A0 maybe goto A1
+A1 a=1 goto A2
+A2 l=0 goto A3
+A3 if b=1 goto A4 else A5
+A4 if l=1 goto A5 else A3
+A5 critical goto A6
+A6 a=0 goto A0
+B0 maybe goto B1
+B1 b=1 goto B2
+B2 l=1 goto B3
+B3 if a=1 goto B4 else B5
+B4 if l=1 goto B3 else B5
+B5 critical goto B6
+B6 b=0 goto B0
