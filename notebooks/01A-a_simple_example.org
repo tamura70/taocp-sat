@@ -2,12 +2,19 @@
 #+AUTHOR: 田村直之
 
 * A Simple Example
-Scala kernelからの実行のため，まず以下の関数を定義する．
+Scala kernelからのプログラム実行のため，まず以下の関数を定義する．
 #+BEGIN_SRC scala
 import scala.sys.process._
 object bash {
   def !(cmd: String): Int = Process(Seq("bash", "-c", cmd)).!
   def !!(cmd: String): String = Process(Seq("bash", "-c", cmd)).!!
+}
+def out(fileName: String)(block: => Unit): Unit = {
+  val o = new java.io.PrintStream(fileName)
+  Console.withOut(o) {
+    block
+  }
+  o.close
 }
 #+END_SRC
 
@@ -18,3 +25,20 @@ bash ! "sat13 < ~/prog/waerden-3-3-9.sat"
 #+BEGIN_SRC scala
 bash ! "grep -v 9 ~/prog/waerden-3-3-9.sat | sat13"
 #+END_SRC
+
+#+BEGIN_SRC scala
+def waerden(j: Int, k: Int, n: Int): Unit = {
+  for (d <- 1 to n; i <- 1 to n; if i+(j-1)*d <= n)
+    println((i to i+(j-1)*d by d).mkString(" "))
+  for (d <- 1 to n; i <- 1 to n; if i+(k-1)*d <= n)
+    println((i to i+(k-1)*d by d).map("~" + _).mkString(" "))
+}
+#+END_SRC
+
+#+BEGIN_SRC scala
+out("/tmp/a.sat") {
+  waerden(3, 3, 8)
+}
+bash ! "sat13 </tmp/a.sat"
+#+END_SRC
+
