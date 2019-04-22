@@ -32,29 +32,20 @@ object bash {
 }
 #+END_SRC
 
-すると以下のようにしてプログラムを実行できる．
+すると以下のようにして様々なプログラムを実行できる．
 #+BEGIN_SRC scala
-bash ! "sat13 -h"
+bash ! "sat13 help"
 #+END_SRC
 
-これはKnuth作のSATソルバー =sat13= を実行している．
-
-詳細は，各プログラムのPDFファイルを参照すること．
-例えば [[../knuth/pdf/sat13.pdf][sat13.pdf]] には以下の説明がある．
-  - 1ページ: 入力の形式
-    + 変数名はASCIIコードで "=!=" から "=}=" の間 (つまり16進で22から7Cまで)の8文字以内の文字列で，
-      "=~=" から始まらないもの
-    + 変数名の直前に "=~=" を付けると否定を表す
-    + "@<tt>~ @</tt>" から始まる行はコメント
-  - 3ページ: オプションの説明
-    + [[../knuth/sat-examples/README][knuth/sat-examples/README]] によれば，Knuthは以下のオプション指定を用いている．
-      : $ sat13 h14 b10000 T50000000000 <file.sat
+ここではKnuth作のSATソルバー sat13 を実行している (不正なオプション =help= を指定している)．
+=bash != の後ろの文字列が，実行するbashのコマンドである．
 
 まず，教科書4ページの式(6) [[../prog/rivest-sat.sat][rivest-sat.sat]] に対して実行してみる．
 #+BEGIN_SRC scala
 bash ! "sat13 < ~/prog/rivest-unsat.sat"
 #+END_SRC
 
+以下のような出力結果が得られるはずだ．
 #+BEGIN_EXAMPLE
 (4 variables, 8 clauses, 24 literals successfully read)
 UNSAT
@@ -81,4 +72,15 @@ bash ! "sat13 < ~/prog/rivest-sat.sat"
 #+END_SRC
 
   - 解の値割当てを表す "=3 ~1 2 4=" 以外の行は，標準エラーに出力されている．
+
+各プログラムの詳細は，それぞれのPDFファイルを参照すること．
+例えば [[../knuth/pdf/sat13.pdf][sat13.pdf]] には以下の説明がある．
+  - 1ページ: 入力の形式
+    + 変数名はASCIIコードで "=!=" から "=}=" の間 (つまり16進で22から7Cまで)の8文字以内の文字列で，
+      "=~=" から始まらないもの
+    + 変数名の直前に "=~=" を付けると否定を表す
+    + "@<tt>~ @</tt>" から始まる行はコメント
+  - 3ページ: オプションの説明
+    + [[../knuth/sat-examples/README][knuth/sat-examples/README]] によれば，Knuthは以下のオプション指定を用いている．
+      : $ sat13 h14 b10000 T50000000000 <file.sat
 
