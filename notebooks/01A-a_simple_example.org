@@ -63,7 +63,7 @@ bash ! "sat13 </tmp/a.sat"
 #+BEGIN_SRC scala
 val (j,k,n) = (3,3,8)
 val model = bash !! s"sat-waerden $j $k $n | sat13"
-val xs = for (i <- 1 to n).map(_.toString)
+val xs = for (i <- 1 to n) yield i.toString
 values(xs, model)
 #+END_SRC
 
