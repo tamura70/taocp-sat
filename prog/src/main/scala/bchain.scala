@@ -3,10 +3,10 @@ import utils.{neg,value}
 
 class BooleanChain {
   var chain: Seq[Seq[String]] = Seq.empty
-  def add(xs: Seq[String]) {
+  def add(xs: Seq[String]): Unit = {
     chain :+= xs
   }
-  def add(line: String) {
+  def add(line: String): Unit = {
     val re1 = """~ (.*)""".r
     val re2 = """; (.*)""".r
     val re3 = """(\S+)\s+=\s+(~?\S+)""".r
@@ -18,7 +18,7 @@ class BooleanChain {
       case re4(z, x, op, y) => add(Seq(op, z, x, y))
     }
   }
-  def load(source: Source) {
+  def load(source: Source): Unit = {
     for (line <- source.getLines)
       add(line)
   }
@@ -28,7 +28,7 @@ class BooleanChain {
     case Seq("", z, _) => z
     case Seq(op, z, _, _) => z
   }
-  def encode(xs: Seq[String]) {
+  def encode(xs: Seq[String]): Unit = {
     xs match {
       case Seq("~", msg) => println("~ " + msg)
       case Seq(";", clause) => println(clause)
@@ -68,7 +68,7 @@ class BooleanChain {
       }
     }
   }
-  def encode {
+  def encode: Unit = {
     for (xs <- chain)
       encode(xs)
   }
@@ -93,7 +93,7 @@ class BooleanChain {
       e = eval(xs, e)
     e
   }
-  def eval(lits: Seq[String]) {
+  def eval(lits: Seq[String]): Unit =  {
     var assignment: Map[String,Boolean] = Map.empty
     for (lit <- lits) {
       if (lit.startsWith("~")) assignment += lit.substring(1) -> false
@@ -107,14 +107,22 @@ class BooleanChain {
 }
 
 object bchain {
-  def main(args: Array[String]) {
+  def encode(): Unit = {
     val bchain = new BooleanChain
     bchain.load(Source.stdin)
+    bchain.encode
+  }
+  def eval(lits: Seq[String]): Unit = {
+    val bchain = new BooleanChain
+    bchain.load(Source.stdin)
+    bchain.eval(lits)
+  }
+  def main(args: Array[String]): Unit = {
     args(0) match {
       case "encode" =>
-        bchain.encode
+        encode
       case "eval" =>
-        bchain.eval(args.drop(1))
+        eval(args.drop(1))
     }
   }  
 }

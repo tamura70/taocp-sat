@@ -2,9 +2,9 @@ import utils.{newBool,v}
 
 class Bin(queue: Int = 0) {
   var bin: Map[Int,Seq[String]] = Map.empty
-  def isEmpty = bin.isEmpty
-  def size(k: Int) = bin.getOrElse(k, Seq.empty).size
-  def add(k: Int, elem: String) {
+  def isEmpty: Boolean = bin.isEmpty
+  def size(k: Int): Int = bin.getOrElse(k, Seq.empty).size
+  def add(k: Int, elem: String): Unit = {
     val q0 = bin.getOrElse(k, Seq.empty)
     val q1 = queue match {
       case 0 => q0 :+ elem // FIFO
@@ -20,12 +20,12 @@ class Bin(queue: Int = 0) {
       bin += k -> rest
     elem
   }
-  def bool(p: String) = {
+  def bool(p: String): String = {
     val b = newBool
     println(s"$b = $p")
     b
   }
-  def dadda(str: String) = {
+  def dadda(str: String): Unit = {
     def z(k: Int) = s"$str$k"
     var k = 0
     while (! isEmpty) {
@@ -56,19 +56,19 @@ class Bin(queue: Int = 0) {
 }
 
 object dadda {
-  def add(bin: Bin, x: String, i0: Int, i1: Int) {
+  def add(bin: Bin, x: String, i0: Int, i1: Int): Unit = {
     for (i <- i0 to i1)
       bin.add(i, v(x,i))
   }
-  def product(bin: Bin, x: String, i0: Int, i1: Int, y: String, j0: Int, j1: Int) {
+  def product(bin: Bin, x: String, i0: Int, i1: Int, y: String, j0: Int, j1: Int): Unit = {
     for (i <- i0 to i1; j <- j0 to j1)
       bin.add(i+j-1, v(x,i) + " and " + v(y,j))
   }
-  def palindrome(x: String, i0: Int, i1: Int) {
+  def palindrome(x: String, i0: Int, i1: Int): Unit = {
     for (i <- i0 to i1; j = i0 + i1 - i; if i < j)
       println(v(x,i) + " = " + v(x,j))
   }
-  def factor(queue: Int, m: Int, n: Int, zs: String) {
+  def factor(queue: Int, m: Int, n: Int, zs: String): Unit = {
     val bin = new Bin(queue)
     product(bin, "X", 1, m, "Y", 1, n)
     bin.dadda("Z")
@@ -79,7 +79,7 @@ object dadda {
       case _ =>
     }
   }
-  def square_palindrome(m: Int, n: Int) {
+  def square_palindrome(m: Int, n: Int): Unit = {
     val bin = new Bin
     product(bin, "X", 1, m, "X", 1, m)
     bin.dadda("Z")
@@ -88,7 +88,7 @@ object dadda {
     for (i <- n+1 to 2*m)
       println(v("Z",i) + " = 0")
   }
-  def square_palindrome2(m: Int, n: Int, xs: String) {
+  def square_palindrome2(m: Int, n: Int, xs: String): Unit = {
     val bin = new Bin
     product(bin, "X", 1, m, "X", 1, m)
     bin.dadda("Z")
@@ -115,7 +115,7 @@ object dadda {
       }
     }
   }
-  def tri_palindrome(k: Int, m: Int) {
+  def tri_palindrome(k: Int, m: Int): Unit = {
     val bin = new Bin
     product(bin, "N", 1, k, "N", 1, k)
     add(bin, "N", 1, k)
@@ -126,7 +126,7 @@ object dadda {
     for (i <- m+1 to 2*k)
       println(v("TT",i) + " = 0")
   }
-  def ex43(n: Int, m: Int) {
+  def ex43(n: Int, m: Int): Unit = {
     val bin = new Bin
     product(bin, "X", 1, n, "Y", 1, n)
     bin.dadda("Z")
@@ -139,7 +139,7 @@ object dadda {
     for (i <- m+1 to 2*n)
       println(v("Z",i) + " = 0")
   }
-  def main(args: Array[String]) {
+  def main(args: Array[String]): Unit = {
     args(0) match {
       case "factor_fifo" =>
         factor(0, args(1).toInt, args(2).toInt, args(3))

@@ -15,15 +15,15 @@ bash ! "sat-color mcgregor10.gb 4 | sat13"
 #+BEGIN_SRC scala
 bash ! "mcgregor-graph 10"
 val model = bash !! "sat-color mcgregor10.gb 4 | sat13"
-model.split(" ").filter(! _.startsWith("~"))
+model.split(" ").filter(_.matches("""\d+\.\d+\.\d+"""))
 #+END_SRC
 
-10次のMcGregorグラフの4彩色で色1が7回以下の彩色を求める．
+10次のMcGregorグラフの4彩色で色4が7回以下の彩色を求める．
 #+BEGIN_SRC scala
 bash ! "mcgregor-graph 10"
 bash ! "sat-color mcgregor10.gb 4 > /tmp/mcg10.sat"
 bash ! "sat-threshold-sinz-graphs 110 7 mcgregor10.gb 4 > /tmp/mcg10le7.sat"
 val model = bash !! "cat /tmp/mcg10.sat /tmp/mcg10le7.sat | sat13"
-model.split(" ").filter(! _.startsWith("~"))
+model.split(" ").filter(_.matches("""\d+\.\d+\.\d+"""))
 #+END_SRC
 

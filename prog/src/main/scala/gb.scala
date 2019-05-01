@@ -20,15 +20,15 @@ class GBGraph {
     var utils: String = ""
     override def toString = s"A$id: V${from.id} -> V${to.id}, $utils"
   }
-  def newVertex(id: Int) =
+  def newVertex(id: Int): Vertex =
     vertices.getOrElse(id, {
       val v = Vertex(id); vertices += id -> v; v
     })
-  def newArc(id: Int) =
+  def newArc(id: Int): Arc =
     arcs.getOrElse(id, {
       val a = Arc(id); arcs += id -> a; a
     })
-  def load(source: Source) {
+  def load(source: Source): Unit = {
     val lines: Iterator[String] = {
       val it = source.getLines
       new Iterator[String] {
@@ -105,7 +105,7 @@ class GBGraph {
 }
 
 object GBGraphMain {
-  def gates2bchain(gb: GBGraph) {
+  def gates2bchain(gb: GBGraph): Unit = {
     for ((_,v) <- gb.vertices) {
       val name = v.name
       val op = v.utils.split(",")(1).toInt.toChar
@@ -123,7 +123,7 @@ object GBGraphMain {
     }
   }
 
-  def main(args: Array[String]) {
+  def main(args: Array[String]): Unit = {
     val gb = new GBGraph
     gb.load(Source.fromFile(args(1)))
     args(0) match {

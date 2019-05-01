@@ -1,5 +1,5 @@
 object triples {
-  def pythagorean(n: Int) {
+  def pythagorean(n: Int): Unit = {
     for {
       a <- 1 to (n/math.sqrt(2)).toInt + 1
       b <- a+1 to math.sqrt(n*n - a*a).toInt + 1
@@ -11,7 +11,7 @@ object triples {
       println(s"~$a ~$b ~$c")
     }
   }
-  def main(args: Array[String]) {
+  def main(args: Array[String]): Unit = {
     args(0) match {
       case "pythagorean" =>
         pythagorean(args(1).toInt)

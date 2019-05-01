@@ -13,7 +13,7 @@ object decode {
     } yield (v,s.toInt) -> ! neg
     seq.toMap
   }
-  def decodeDirect(map: Map[(String,Int),Boolean], vs: Seq[String]) {
+  def decodeDirect(map: Map[(String,Int),Boolean], vs: Seq[String]): Unit = {
     for (v <- vs) {
       val is = map.keys.filter(_._1 == v).map(_._2)
       if (is.isEmpty) {
@@ -24,7 +24,7 @@ object decode {
       }
     }
   }
-  def decodeLog(map: Map[(String,Int),Boolean], vs: Seq[String]) {
+  def decodeLog(map: Map[(String,Int),Boolean], vs: Seq[String]): Unit = {
     for (v <- vs) {
       val is = map.keys.filter(_._1 == v).map(_._2)
       if (is.isEmpty) {
@@ -46,7 +46,7 @@ object decode {
       }
     }
   }
-  def main(args: Array[String]) {
+  def main(args: Array[String]): Unit = {
     val result = scala.io.Source.stdin.mkString.trim
     result match {
       case "" => println("ERROR")

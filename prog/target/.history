@@ -1,12 +1,6 @@
 compile
 package
 compile
-package
+clean
 compile
-package
-compile
-package
-console
-2.pow(5)
-console
 package

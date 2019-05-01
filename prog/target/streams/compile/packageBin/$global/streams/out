@@ -14,6 +14,8 @@
 [0m[[0m[0mdebug[0m] [0m[0m	  /home/tamura/lect2/taocp-sat/prog/target/classes/BooleanChain.class[0m
 [0m[[0m[0mdebug[0m] [0m[0m	GBGraph$Arc.class[0m
 [0m[[0m[0mdebug[0m] [0m[0m	  /home/tamura/lect2/taocp-sat/prog/target/classes/GBGraph$Arc.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	triples.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/tamura/lect2/taocp-sat/prog/target/classes/triples.class[0m
 [0m[[0m[0mdebug[0m] [0m[0m	SolverA$.class[0m
 [0m[[0m[0mdebug[0m] [0m[0m	  /home/tamura/lect2/taocp-sat/prog/target/classes/SolverA$.class[0m
 [0m[[0m[0mdebug[0m] [0m[0m	sat_dance_heule.class[0m
@@ -30,6 +32,8 @@
 [0m[[0m[0mdebug[0m] [0m[0m	  /home/tamura/lect2/taocp-sat/prog/target/classes/synth.class[0m
 [0m[[0m[0mdebug[0m] [0m[0m	sat_dance_aspvall$.class[0m
 [0m[[0m[0mdebug[0m] [0m[0m	  /home/tamura/lect2/taocp-sat/prog/target/classes/sat_dance_aspvall$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	triples$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/tamura/lect2/taocp-sat/prog/target/classes/triples$.class[0m
 [0m[[0m[0mdebug[0m] [0m[0m	GBGraph$Vertex.class[0m
 [0m[[0m[0mdebug[0m] [0m[0m	  /home/tamura/lect2/taocp-sat/prog/target/classes/GBGraph$Vertex.class[0m
 [0m[[0m[0mdebug[0m] [0m[0m	mcgregor.class[0m

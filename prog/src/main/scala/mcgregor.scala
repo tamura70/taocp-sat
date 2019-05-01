@@ -1,8 +1,8 @@
 import utils.{neg,atleast1,exact1,atmostR_sinz,atmostR_bb}
 
 object mcgregor {
-  def eq(v: String, c: Int) = s"$v.$c"
-  def gcp(vertices: Seq[String], edges: Seq[(String,String)], colors: Int) {
+  def eq(v: String, c: Int): String = s"$v.$c"
+  def gcp(vertices: Seq[String], edges: Seq[(String,String)], colors: Int): Unit = {
     for (v <- vertices) {
       val xs = (1 to colors).map(c => eq(v,c))
       atleast1(xs)
@@ -13,7 +13,7 @@ object mcgregor {
         println(neg(eq(u,c)) + " " + neg(eq(v,c)))
     }
   }
-  def mcgregor(n: Int) = {
+  def mcgregor(n: Int): (Seq[String],Seq[(String,String)]) = {
     def v(j: Int, k: Int) = s"$j.$k"
     val vertices = for (j <- 0 to n; k <- 0 until n) yield v(j,k)
     var edges: Seq[(String,String)] = Seq.empty
@@ -38,7 +38,7 @@ object mcgregor {
     }
     (vertices, edges)
   }
-  def graph(n: Int) {
+  def graph(n: Int): Unit = {
     val (vertices, edges) = mcgregor(n)
     println(s"c McGregor graph of order $n")
     println(s"p edge ${vertices.size} ${edges.size}")
@@ -47,21 +47,21 @@ object mcgregor {
     for ((u,v) <- edges)
       println(s"e $u $v")
   }
-  def color(n: Int, colors: Int) {
+  def color(n: Int, colors: Int): Unit = {
     val (vertices, edges) = mcgregor(n)
     gcp(vertices, edges, colors)
   }
-  def color_sinz(n: Int, colors: Int, r: Int) {
+  def color_sinz(n: Int, colors: Int, r: Int): Unit = {
     val (vertices, edges) = mcgregor(n)
     gcp(vertices, edges, colors)
     atmostR_sinz(vertices.map(v => eq(v,1)), r)
   }
-  def color_bb(n: Int, colors: Int, r: Int) {
+  def color_bb(n: Int, colors: Int, r: Int): Unit = {
     val (vertices, edges) = mcgregor(n)
     gcp(vertices, edges, colors)
     atmostR_bb(vertices.map(v => eq(v,1)), r)
   }
-  def main(args: Array[String]) {
+  def main(args: Array[String]): Unit = {
     args(0) match {
       case "graph" =>
         graph(args(1).toInt)

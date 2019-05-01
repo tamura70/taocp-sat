@@ -1,5 +1,5 @@
 object utils {
-  def neg(lit: String) =
+  def neg(lit: String): String =
     if (lit.startsWith("~")) lit.substring(1) else "~" + lit
   def value(lit: String, assignment: Map[String,Boolean]): Boolean =
     lit match {
@@ -18,24 +18,24 @@ object utils {
       } yield xs(i) -> b
       as.toMap
     }
-  def bitvec2str(bs: Seq[Boolean]) = bs.map(if (_) 1 else 0).mkString("")
+  def bitvec2str(bs: Seq[Boolean]): String = bs.map(if (_) 1 else 0).mkString("")
 
   var bcount = 0
-  def newBool = { bcount += 1; s"_$bcount" }
-  def v(x: String, i: Int) = s"$x$i"
-  def v(x: String, i: Int, j: Int) = s"$x${i}_$j"
-  def atleast1(lits: Seq[String]) {
+  def newBool: String = { bcount += 1; s"_$bcount" }
+  def v(x: String, i: Int): String = s"$x$i"
+  def v(x: String, i: Int, j: Int): String = s"$x${i}_$j"
+  def atleast1(lits: Seq[String]): Unit = {
     println(lits.mkString(" "))
   }
-  def atmost1(lits: Seq[String]) {
+  def atmost1(lits: Seq[String]): Unit = {
     for (Seq(lit1,lit2) <- lits.combinations(2))
       println(neg(lit1) + " " + neg(lit2))
   }
-  def exact1(lits: Seq[String]) {
+  def exact1(lits: Seq[String]): Unit = {
     atleast1(lits)
     atmost1(lits)
   }
-  def atmost1_heule(lits: Seq[String]) {
+  def atmost1_heule(lits: Seq[String]): Unit = {
     if (lits.size <= 4) {
       for (Seq(lit1,lit2) <- lits.combinations(2))
         println(neg(lit1) + " " + neg(lit2))
@@ -45,11 +45,11 @@ object utils {
       atmost1(neg(t) +: lits.drop(3))
     }
   }
-  def exact1_heule(lits: Seq[String]) {
+  def exact1_heule(lits: Seq[String]): Unit = {
     atleast1(lits)
     atmost1_heule(lits)
   }
-  def atmost1_aspvall(lits: Seq[String]) {
+  def atmost1_aspvall(lits: Seq[String]): Unit = {
     val p = lits.size
     if (p <= 3) {
       atmost1(lits)
@@ -68,25 +68,25 @@ object utils {
       }
     }
   }
-  def exact1_aspvall(lits: Seq[String]) {
+  def exact1_aspvall(lits: Seq[String]): Unit = {
     atleast1(lits)
     atmost1_aspvall(lits)
   }
-  def atleastR(lits: Seq[String], r: Int) {
+  def atleastR(lits: Seq[String], r: Int): Unit = {
     atmostR(lits.map(neg(_)), lits.size - r)
   }
-  def atmostR(lits: Seq[String], r: Int) {
+  def atmostR(lits: Seq[String], r: Int): Unit = {
     for (lits1 <- lits.combinations(r))
       println(lits1.map(neg(_)).mkString(" "))
   }
-  def exactR(lits: Seq[String], r: Int) {
+  def exactR(lits: Seq[String], r: Int): Unit = {
     atleastR(lits, r)
     atmostR(lits, r)
   }
-  def atleastR_sinz(lits: Seq[String], r: Int) {
+  def atleastR_sinz(lits: Seq[String], r: Int): Unit = {
     atmostR_sinz(lits.map(neg(_)), lits.size - r)
   }
-  def atmostR_sinz(lits: Seq[String], r: Int) {
+  def atmostR_sinz(lits: Seq[String], r: Int): Unit = {
     val n = lits.size
     val s = {
       for (j <- 1 to n - r; k <- 1 to r)
@@ -103,14 +103,14 @@ object utils {
       else
         println(neg(x(j+k)) + " " + neg(s(j,k)) + " " + s(j,k+1))
   }
-  def exactR_sinz(lits: Seq[String], r: Int) {
+  def exactR_sinz(lits: Seq[String], r: Int): Unit = {
     atleastR_sinz(lits, r)
     atmostR_sinz(lits, r)
   }
-  def atleastR_bb(lits: Seq[String], r: Int) {
+  def atleastR_bb(lits: Seq[String], r: Int): Unit = {
     atmostR_bb(lits.map(neg(_)), lits.size - r)
   }
-  def atmostR_bb(lits: Seq[String], r: Int) {
+  def atmostR_bb(lits: Seq[String], r: Int): Unit = {
     val n = lits.size
     def count(k: Int): Int =
       if (k >= n) 1 else count(2*k) + count(2*k+1)
@@ -136,7 +136,7 @@ object utils {
       println(c.mkString(" "))
     }
   }
-  def exactR_bb(lits: Seq[String], r: Int) {
+  def exactR_bb(lits: Seq[String], r: Int): Unit = {
     atleastR_bb(lits, r)
     atmostR_bb(lits, r)
   }

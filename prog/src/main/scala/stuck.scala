@@ -14,12 +14,12 @@ object stuck {
       if output != correct
       stuck = if (st) wire else "~" + wire
     } yield (bitvec2str(input), stuck, bitvec2str(output))
-  def list_patterns(bchain: BooleanChain, ins: Seq[String], outs: Seq[String]) {
+  def list_patterns(bchain: BooleanChain, ins: Seq[String], outs: Seq[String]): Unit = {
     for ((pattern,stuck,output) <- patterns(bchain, ins, outs)) {
       println(pattern + " " +  stuck + " " + output)
     }
   }
-  def covering(bchain: BooleanChain, ins: Seq[String], outs: Seq[String]) {
+  def covering(bchain: BooleanChain, ins: Seq[String], outs: Seq[String]): Unit = {
     val ps = patterns(bchain, ins, outs).toSeq
     for {
       wire <- bchain.variables; if wire != ""
@@ -32,12 +32,12 @@ object stuck {
         println(patterns.mkString(" "))
     }
   }
-  def min_covering(bchain: BooleanChain, ins: Seq[String], outs: Seq[String], r: Int) {
+  def min_covering(bchain: BooleanChain, ins: Seq[String], outs: Seq[String], r: Int): Unit = {
     covering(bchain, ins, outs)
     val patterns = (0 until (1 << ins.size)).map(_.toString)
     atmostR_bb(patterns, r)
   }
-  def main(args: Array[String]) {
+  def main(args: Array[String]): Unit = {
     val bchain = new BooleanChain
     bchain.load(scala.io.Source.stdin)
     val ins = args(1).split(",")
