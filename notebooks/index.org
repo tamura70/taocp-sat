@@ -13,7 +13,8 @@ Donald E. Knuth]] 先生の名著 [[https://www-cs-faculty.stanford.edu/~knuth/t
 * ノートブック
 
   - [[file:01A-a_simple_example.ipynb][簡単な例 (A simple example)]]
-  - [[file:01B-exact_covering.org][厳密被覆 (Exact covering)]]
+  - [[file:01B-exact_covering.ipynb][厳密被覆 (Exact covering)]]
+  - [[file:01C-coloring_a_graph.ipynb][グラフ彩色 (Coloring a graph)]]
 
 * プログラム
 ** Knuth版プログラム
