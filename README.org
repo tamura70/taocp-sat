@@ -3,7 +3,7 @@
 * Introduction
 # #+HTML: <a href="https://mybinder.org/v2/gh/tamura70/taocp-sat/master?urlpath=lab/tree/notebooks/index.ipynb"><img src="https://mybinder.org/badge_logo.svg"/></a>
 
-[[https://github.com/tamura70/taocp-sat/][This repository]] provides Linux binaries and PDF files produced from the CWEB programs written by [[https://www-cs-faculty.stanford.edu/~knuth/][Donald E. Knuth]] for "Satisfiability", Volume 4 Fascicle 6 of [[https://www-cs-faculty.stanford.edu/~knuth/taocp.html][The Art of Computer Programming]] (TAOCP).  The original CWEB programs were obtained on May 19, 2019 from:
+[[https://github.com/tamura70/taocp-sat/][This repository]] provides Linux binaries and PDF files produced from the CWEB programs written by [[https://www-cs-faculty.stanford.edu/~knuth/][Donald E. Knuth]] for "Satisfiability", Volume 4 Fascicle 6 of [[https://www-cs-faculty.stanford.edu/~knuth/taocp.html][The Art of Computer Programming]] (TAOCP).  The original CWEB programs were obtained on March 19, 2019 from:
   - [[https://www-cs-faculty.stanford.edu/~knuth/programs.html]]
 
 They were compiled on Ubuntu 18.04 with TeX Live 2018 by using the following Perl script.
