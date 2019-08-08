@@ -2,7 +2,7 @@
 #+AUTHOR: 田村直之
 
 * はじめに
-Donald E. Knuth]] 先生の名著 [[https://www-cs-faculty.stanford.edu/~knuth/taocp.html][The Art of Computer Programming]] (TAOCP)の
+Donald E. Knuth 先生の名著 [[https://www-cs-faculty.stanford.edu/~knuth/taocp.html][The Art of Computer Programming]] (TAOCP)の
 第4巻 Combinatorial Algorithms 中の 7.2.2.2 節 Satisfiability のプログラム等を提供しています．
 プログラムは， [[http://jupyter.org][Jupyter]] ノートブック ([[https://almond.sh][Almond]] Scala kernelを利用)から実行可能です．
 
